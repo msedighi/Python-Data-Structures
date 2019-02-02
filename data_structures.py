@@ -8,26 +8,40 @@ class LL_Node_Double(LL_Node_Single): # Doubly Linked-List Node
 
 class LinkedList_Single:
     count = 0
-    def __init__(self, first_val):
-        self.first = LL_Node_Single(first_val)
-        self.position = self.first
-        self.count = 1
+    def __init__(self, first_val=None):
+        if first_val:
+            self.first = LL_Node_Single(first_val)
+            self.count = 1
+        else:
+            self.first = None
 
     def add(self, val):
+        if self.first:
+            node = self.first
+            while node.next:
+                node = node.next
+            else:
+                node.next = LL_Node_Single(val)
+                self.count += 1
+        else:
+            self.first = LL_Node_Single(val)
+            self.count = 1
+
+
+    def attach(self, LL2):
+        self.count += LL2.count
         node = self.first
         while node.next:
             node = node.next
         else:
-            node.next = LL_Node_Single(val)
-            self.position = node
-            self.count += 1
+            node.next = LL2.first
 
-    def traverse(self): # I wanna do some action at each node then move so I can 
+    def traverse(self, func):  
         node = self.first
-        print(node.value)
+        func(node.value)
         while node.next:
             node = node.next
-            print(node.value)
+            func(node.value)
 
 class LinkedList_Double(LinkedList_Single):
     def __init__(self, first_val):
@@ -50,45 +64,155 @@ class BT_Node: # Binary Tree Node
     def __init__(self, val):
         self.value = val
 
-    def LRootR(self):
+    def LRootR(self, func):
         if self.left:
-            self.left.LRootR()
+            self.left.LRootR(func)
 
-        print(self.value)
+        func(self.value)
 
         if self.right:
-            self.right.LRootR()
+            self.right.LRootR(func)
 
-    def LRRoot(self):
+    def LRRoot(self, func):
         if self.left:
-            self.left.LRRoot()
+            self.left.LRRoot(func)
 
         if self.right:
-            self.right.LRRoot()
+            self.right.LRRoot(func)
 
-        print(self.value)
+        func(self.value)
 
-    def RootLR(self):
-        print(self.value)
+    def RootLR(self, func):
+        func(self.value)
 
         if self.left:
-            self.left.RootLR()
+            self.left.RootLR(func)
 
         if self.right:
-            self.right.RootLR()
+            self.right.RootLR(func)
+
+    def MaxHeight(self, height):
+        if self.left:
+            l_height = self.left.MaxHeight(height + 1)
+        else:
+            l_height = height
+
+        if self.right:
+            r_height = self.right.MaxHeight(height + 1)
+        else:
+            r_height = height
+
+        if l_height > r_height:
+            return l_height
+        else:
+            return r_height
+
+    def MinHeight(self, height):
+        if self.left:
+            l_height = self.left.MinHeight(height + 1)
+        else:
+            l_height = height
+
+        if self.right:
+            r_height = self.right.MinHeight(height + 1)
+        else:
+            r_height = height
+
+        if l_height < r_height:
+            return l_height
+        else:
+            return r_height
 
 class Binary_Tree:
-    def __init__(self, root_val):
-        self.root = BT_Node(root_val)
+    LevelOrder = []
+    def __init__(self, root_val = None):
+        if root_val:
+            self.root = BT_Node(root_val)
 
-    def LRootR_traverse(self): # I wanna do some action at each node and move to right & left
-        self.root.LRootR()
+    def LRootR_traverse(self, func): # I wanna do some action at each node and move to right & left
+        self.root.LRootR(func)
             
-    def RootLR_traverse(self):
-        self.root.RootLR()
+    def RootLR_traverse(self, func):
+        self.root.RootLR(func)
 
-    def LRRoot_traverse(self):
-        self.root.LRRoot()
+    def LRRoot_traverse(self, func):
+        self.root.LRRoot(func)
+
+    def Height(self):
+        return (self.root.MinHeight(0), self.root.MaxHeight(0))
+
+    def LevelOrder_List(self):
+        OutList = LinkedList_Single()
+        ThisLevel = LinkedList_Single(self.root)
+        node = ThisLevel.first
+        while node:
+            OutList.attach(ThisLevel)
+            ThisLevel = LinkedList_Single()
+            while node.value:
+                if node.value.left:
+                    ThisLevel.add(node.value.left)
+
+                if node.value.right:
+                    ThisLevel.add(node.value.right)
+                
+                if node.next:
+                    node = node.next
+                else:
+                    break
+
+            node = ThisLevel.first
+
+        return OutList
+
+    def LevelOrder_Build(self, InList):
+        i=0        
+        self.root = BT_Node(InList[i])
+        ThisLevel = LinkedList_Single(self.root)
+        LL_node = None
+
+        while True:
+            if LL_node == None:
+                LL_node = ThisLevel.first
+                ThisLevel = LinkedList_Single()
+
+            i += 1
+            if i < len(InList):
+                LL_node.value.left = BT_Node(InList[i])
+                ThisLevel.add(LL_node.value.left)
+            else:
+                break
+
+            i += 1
+            if i < len(InList):
+                LL_node.value.right = BT_Node(InList[i])
+                ThisLevel.add(LL_node.value.right)
+            else:
+                break
+
+            LL_node = LL_node.next
+
+
+    def LevelOrder_traverse(self, func):
+        ThisLevel = LinkedList_Single(self.root)
+        node = ThisLevel.first
+        func(node.value.value)
+        while node:
+            ThisLevel = LinkedList_Single()
+            while node.value:
+                if node.value.left:
+                    ThisLevel.add(node.value.left)
+                    func(node.value.left.value)
+
+                if node.value.right:
+                    ThisLevel.add(node.value.right)
+                    func(node.value.right.value)
+                
+                if node.next:
+                    node = node.next
+                else:
+                    break
+
+            node = ThisLevel.first
 
 
 class BST_Node(BT_Node): # Binary Search Tree Node 
@@ -106,7 +230,7 @@ class BST_Node(BT_Node): # Binary Search Tree Node
                 self.right = BST_Node(val)
         
 
-class BST(Binary_Tree):
+class BST(Binary_Tree): # Binary Search Tree
     def __init__(self, root_val=None):
         self.root = BST_Node(root_val)
 
@@ -116,3 +240,9 @@ class BST(Binary_Tree):
         else:
             self.root.value = val
 
+class BH(Binary_Tree): # Binary Heap
+    def __init__(self):
+        self.root = None
+
+    def Build(self, sorted_array):
+        self.LevelOrder_Build(sorted_array)
