@@ -1,3 +1,5 @@
+from collections import deque
+
 class LL_Node_Single: # Singly Linked-List Node 
     next = None
     def __init__(self, val):
@@ -246,3 +248,70 @@ class BH(Binary_Tree): # Binary Heap
 
     def Build(self, sorted_array):
         self.LevelOrder_Build(sorted_array)
+
+
+class Vertex:
+    def __init__(self, val):
+        self.value = val
+        self.neighbors = set()
+        self.flag = False
+    
+    def add_Neighbors(self, *neighbors):
+        self.neighbors.update(list(neighbors))
+
+class Graph:
+    def __init__(self):
+        self.Vertices = set()
+        
+    def add_Vertex(self, *vertices):
+        self.Vertices.update(list(vertices))
+
+    def print_vertices(self):
+        for v in self.Vertices:
+            print(v.value)
+
+    def reset_flags(self):
+        for V in self.Vertices:
+            V.flag = False
+
+    def BFT(self, func, q):
+        for v in q[0].neighbors:
+            if not v.flag:
+                q.append(v)
+                v.flag = True
+                
+        func(q[0].value)
+        q.popleft()
+
+        if len(q) > 0:
+            self.BFT(func, q)
+    
+    def BFTransverse(self, func):
+        self.reset_flags()
+        q = deque()
+        for start_v in self.Vertices:
+            if not start_v.flag:
+                q.append(start_v)
+                start_v.flag = True
+                self.BFT(func, q)
+
+    def DFT(self, func, s):
+        func(s[0].value)
+        s[0].flag = True
+        for v in s[0].neighbors:
+            if not v.flag:
+                s.appendleft(v)
+                self.DFT(func, s)
+                                
+        s.popleft()
+
+    def DFTransverse(self, func):
+        self.reset_flags()
+        s = deque()
+        for start_v in self.Vertices:
+            if not start_v.flag:
+                s.appendleft(start_v)
+                self.DFT(func, s)
+
+            
+    
