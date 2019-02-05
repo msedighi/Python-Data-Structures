@@ -313,5 +313,35 @@ class Graph:
                 s.appendleft(start_v)
                 self.DFT(func, s)
 
-            
+class Adj_Vertex:
+    def __init__(self, val):
+        self.value = val
+        self.next = None
+
+class Undirected_Graph:
+    def __init__(self, num_v):
+        self.num_vertices = num_v
+        self.vertices = [None] * self.num_vertices
+
+    def add_edge(self, v1, v2):
+        V1 = Adj_Vertex(v1)
+        V2 = Adj_Vertex(v2)
+        V1.next = self.vertices[v2]
+        V2.next = self.vertices[v1]
+        
+        self.vertices[v1] = V2
+        self.vertices[v2] = V1
+
+    def print_graph(self):
+        for i in range(self.num_vertices):
+            print("for ", i, " neighbors are: ")
+            temp = self.vertices[i]
+            while temp:
+                print(temp.value)
+                temp = temp.next
+
+
+
+
+
     
