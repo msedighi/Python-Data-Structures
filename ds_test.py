@@ -98,3 +98,20 @@ UG.add_edge(2, 3)
 UG.add_edge(3, 4)
 
 UG.print_graph()
+
+Tree3 = ds.Binary_Tree(20)
+Tree3.root.left = ds.BT_Node(8)
+Tree3.root.right = ds.BT_Node(22)
+Tree3.root.left.left = ds.BT_Node(4)
+Tree3.root.left.right = ds.BT_Node(12)
+Tree3.root.left.right.left = ds.BT_Node(10)
+Tree3.root.left.right.right = ds.BT_Node(14)
+
+print("Least Common Ancestors: ")
+print(Tree2.Least_Common_Ancestor(4,5)) # Should be: 2
+print(Tree2.Least_Common_Ancestor(4,6)) # Should be: 1
+print(Tree2.Least_Common_Ancestor(3,4)) # Should be: 1
+print(Tree2.Least_Common_Ancestor(2,4)) # Should be: 2
+print(Tree3.Least_Common_Ancestor(10,14)) # Should be: 12
+print(Tree3.Least_Common_Ancestor(14,8)) # Should be: 8
+print(Tree3.Least_Common_Ancestor(10,22)) # Should be: 20

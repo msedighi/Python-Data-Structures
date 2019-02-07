@@ -216,6 +216,40 @@ class Binary_Tree:
 
             node = ThisLevel.first
 
+    def LCA(self, node, v1, v2): # Least_Common_Ancestor
+        if node.left:
+            t_left = self.LCA(node.left, v1, v2)
+        else:
+            t_left = (0, None)
+        if node.right:
+            t_right = self.LCA(node.right, v1, v2)
+        else:
+            t_right = (0, None)
+
+        if t_left[0]==0 and t_right[0]==0 and node.value!=v1 and node.value!=v2:
+            return (0, None)
+        else:
+            if (t_left[0]==1 and t_right[0]==0 and node.value!=v1 and node.value!=v2) or (t_left[0]==0 and t_right[0]==1 and node.value!=v1 and node.value!=v2) or (t_left[0]==0 and t_right[0]==0 and (node.value==v1 or node.value==v2)):
+                return (1, None)
+            else:
+                if (t_left[0]==1 and t_right[0]==1) or ((t_left[0]==1 or t_right[0]==1) and (node.value==v1 or node.value==v2)):
+                    return(2, node.value)
+                else:
+                    if t_left[0]==2:
+                        return t_left
+                    elif t_right[0]==2:
+                        return t_right
+                    else:
+                        print("This should NOT happen!!")
+
+    def Least_Common_Ancestor(self, v1, v2):
+        result = self.LCA(self.root, v1, v2)
+        return result[1]
+
+
+
+
+
 
 class BST_Node(BT_Node): # Binary Search Tree Node 
 
@@ -312,6 +346,7 @@ class Graph:
             if not start_v.flag:
                 s.appendleft(start_v)
                 self.DFT(func, s)
+
 
 class Adj_Vertex:
     def __init__(self, val):
