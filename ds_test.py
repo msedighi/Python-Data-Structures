@@ -115,3 +115,15 @@ print(Tree2.Least_Common_Ancestor(2,4)) # Should be: 2
 print(Tree3.Least_Common_Ancestor(10,14)) # Should be: 12
 print(Tree3.Least_Common_Ancestor(14,8)) # Should be: 8
 print(Tree3.Least_Common_Ancestor(10,22)) # Should be: 20
+print(Tree3.Least_Common_Ancestor(11,12)) # Should be: None
+print(Tree3.Least_Common_Ancestor(11,2)) # Should be: None
+
+print(Tree2.Least_Common_Ancestor0(4,5)) # Should be: 2
+print(Tree2.Least_Common_Ancestor0(4,6)) # Should be: 1
+print(Tree2.Least_Common_Ancestor0(3,4)) # Should be: 1
+print(Tree2.Least_Common_Ancestor0(2,4)) # Should be: 2
+print(Tree3.Least_Common_Ancestor0(10,14)) # Should be: 12
+print(Tree3.Least_Common_Ancestor0(14,8)) # Should be: 8
+print(Tree3.Least_Common_Ancestor0(10,22)) # Should be: 20
+print(Tree3.Least_Common_Ancestor0(11,12)) # Should be: None -> FAILS!
+print(Tree3.Least_Common_Ancestor0(11,2)) # Should be: None

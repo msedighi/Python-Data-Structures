@@ -216,6 +216,26 @@ class Binary_Tree:
 
             node = ThisLevel.first
 
+
+    def LCA0(self, node, v1, v2): # Least_Common_Ancestor (Assuming v1 & v2 are in the tree)
+        if node==None:
+            return None
+
+        if node.value==v1 or node.value==v2:
+            return node.value
+        
+        t_left = self.LCA0(node.left, v1, v2)
+        t_right = self.LCA0(node.right, v1, v2)
+        if t_left and t_right:
+            return node.value
+        elif t_left:
+            return t_left
+        else:
+            return t_right # Both can never be None or we should have not got here
+
+    def Least_Common_Ancestor0(self, v1, v2): # Assuming v1 & v2 are in the tree
+        return self.LCA0(self.root, v1, v2)
+
     def LCA(self, node, v1, v2): # Least_Common_Ancestor
         if node.left:
             t_left = self.LCA(node.left, v1, v2)
@@ -243,13 +263,11 @@ class Binary_Tree:
                         print("This should NOT happen!!")
 
     def Least_Common_Ancestor(self, v1, v2):
-        result = self.LCA(self.root, v1, v2)
-        return result[1]
-
-
-
-
-
+        if self.root:
+            result = self.LCA(self.root, v1, v2)
+            return result[1]
+        else:
+            return None
 
 class BST_Node(BT_Node): # Binary Search Tree Node 
 
